@@ -15,7 +15,8 @@ pymongo[srv]>=4.6,<5
 dnspython>=2.6,<3
 
 # Auth
-passlib[argon2]>=1.7.4,<2
+passlib==1.7.4
+bcrypt==4.1.3
 python-jose[cryptography]>=3.3,<4
 
 # Scraping
@@ -26,3 +27,4 @@ apscheduler>=3.10,<4
 jinja2>=3.1,<4
 openai>=1.40,<2  # si lo usas
 pandas>=2.2,<3   # solo si de verdad lo usas
+
