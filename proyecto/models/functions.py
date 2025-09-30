@@ -17,11 +17,17 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+def _normalize_secret(pw: str) -> str:
+    # bcrypt solo usa 72 bytes; si excede, pre-hash
+    if len(pw.encode("utf-8")) > 72:
+        return hashlib.sha256(pw.encode("utf-8")).hexdigest()
+    return pw
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+def get_password_hash(password: str) -> str:
+    return pwd_context.hash(_normalize_secret(password))
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(_normalize_secret(plain), hashed)
 
 #ACCESO TOKEN
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
@@ -113,4 +119,5 @@ async def scrap_psicologia(newspsi_collection):
         except Exception as e:
             print(f"⚠️ Psico item: {e}")
             continue
+
 
